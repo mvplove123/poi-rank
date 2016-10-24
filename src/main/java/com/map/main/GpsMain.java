@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
  * poi gps 计算
  */
 public class GpsMain {
-    private static final String gps = "/gps";
+    private static final String gps = "/bjgps";
 
 
     private static final String inputGpsPath = "/user/go2mapimelog/ime.full/2016_07_*/part*";

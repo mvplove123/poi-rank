@@ -181,6 +181,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
+                            <!--<mainClass>com.map.util.ExcelParse</mainClass>-->
                         </manifest>
                     </archive>
                 </configuration>

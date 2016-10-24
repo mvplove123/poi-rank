@@ -54,15 +54,15 @@ public class HookReducer extends Reducer<Text, Text, NullWritable, Text> {
             String[] result = poiValue.split("\\t");
             dataId = result[0];
             name = result[1];
-            city = result[2];
-            category = result[3];
-            subCategory = result[4];
-            point = result[5];
-            String count = result[6];
+//            city = result[2];
+//            category = result[3];
+//            subCategory = result[4];
+//            point = result[5];
+            String count = result[2];
             totalCount += Integer.valueOf(count);
         }
         Joiner joiner = Joiner.on("\t");
-        String value = joiner.join(new String[]{dataId, name, city, category, subCategory, point, String.valueOf(totalCount)});
+        String value = joiner.join(new String[]{dataId, name,String.valueOf(totalCount)});
 
         outputs.write(NullWritable.get(), new Text(value), "poiHotCount");
 

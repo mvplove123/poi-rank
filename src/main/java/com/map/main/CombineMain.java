@@ -62,8 +62,17 @@ public class CombineMain {
                 int e = input.length() - 1;
                 input = input.substring(0, e);
             }
-            String inputPath = parent + "," + caculate + "," + Constants.MYSELF + "," + Constants.POI + "," +
-                    Constants.BUS_POI;
+
+            String[] inputPoiPath = input.split(",");
+
+            if(inputPoiPath.length!= 3){
+                System.err.println("inputPoiPath length is wrong,should be 3");
+                System.exit(2);
+            }
+
+
+
+            String inputPath = parent + "," + caculate + "," + input;
 
 
             String output = otherArgs[1];
@@ -82,7 +91,7 @@ public class CombineMain {
 
             System.out.println("input path: " + inputPath);
             System.out.println("output path: " + out);
-            Job job = new Job(conf, "combineMain --");
+            Job job = new Job(conf, "combineMain --taoyongbo");
             job.setJarByClass(CombineMain.class);
             job.setReducerClass(CombineReducer.class);
             job.setNumReduceTasks(500);
@@ -103,9 +112,9 @@ public class CombineMain {
             MultipleInputs.addInputPath(job, new Path(parent), TextInputFormat.class, CombineMapper.class);
             MultipleInputs.addInputPath(job, new Path(gpsCombine), TextInputFormat.class, CombineMapper.class);
             MultipleInputs.addInputPath(job, new Path(search), TextInputFormat.class, CombineMapper.class);
-            MultipleInputs.addInputPath(job, new Path(Constants.MYSELF), TextInputFormat.class, CombineMapper.class);
-            MultipleInputs.addInputPath(job, new Path(Constants.POI), TextInputFormat.class, CombineMapper.class);
-            MultipleInputs.addInputPath(job, new Path(Constants.BUS_POI), TextInputFormat.class, CombineMapper.class);
+            MultipleInputs.addInputPath(job, new Path(inputPoiPath[0]), TextInputFormat.class, CombineMapper.class);
+            MultipleInputs.addInputPath(job, new Path(inputPoiPath[1]), TextInputFormat.class, CombineMapper.class);
+            MultipleInputs.addInputPath(job, new Path(inputPoiPath[2]), TextInputFormat.class, CombineMapper.class);
 
             FileOutputFormat.setOutputPath(job, out);
 

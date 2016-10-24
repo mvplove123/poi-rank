@@ -12,14 +12,14 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.formula.functions.T;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.*;
-import java.nio.charset.Charset;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Comparator;
 import java.util.List;
 import java.util.TreeSet;
@@ -244,7 +244,6 @@ public class ExcelHandler {
         if(StringUtils.isBlank(value)){
             return null;
         }
-        System.out.println(value);
         TreeSet<String> level = new TreeSet(new MyComparator());
         TreeSet<String> score = new TreeSet(new MyComparator());
         String[] a = value.trim().split("\\|");

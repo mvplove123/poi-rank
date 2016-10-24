@@ -57,20 +57,20 @@ public class GpsMapper extends Mapper<LongWritable, Text, Text, Text> {
                             double[] ll = Convertor_LL_Mer.LL2Mer(lng, lat);
 
 
-                            String x = String.valueOf(ll[0]);
-                            String y = String.valueOf(ll[1]);
-
-                            String point = x + "," + y;
-
-                            String currentID = cellCut.getCurrentCell(x, y);
-                            context.write(new Text(currentID), new Text(point));
 
 
 
-//                            //筛选北京坐标数据
-//                            if (ll[0] >= minX && ll[0] <= maxX && ll[1] >= minY && ll[1] <= maxY) {
-//
-//                            }
+
+                            //筛选北京坐标数据
+                            if (ll[0] >= minX && ll[0] <= maxX && ll[1] >= minY && ll[1] <= maxY) {
+                                String x = String.valueOf(ll[0]);
+                                String y = String.valueOf(ll[1]);
+
+                                String point = x + "," + y;
+
+                                String currentID = cellCut.getCurrentCell(x, y);
+                                context.write(new Text(currentID), new Text(point));
+                            }
                         }
                     }
                 }

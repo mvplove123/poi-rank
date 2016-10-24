@@ -25,12 +25,12 @@ import java.util.Map;
  * poi Gps mapper 统计
  */
 public class GpsCombineMapper extends Mapper<LongWritable, Text, Text, Text> {
-    CellCut cellCut = new CellCut(100, 50);/////格子范围，实际取值范围应设置在50范围内
+    CellCut cellCut = new CellCut(50, 50);/////格子范围，实际取值范围应设置在50范围内
 
     protected static final Logger logger = LoggerFactory.getLogger(GpsCombineMapper.class);
 
 
-    Map<String,Integer> categoryGps =  CategoryThreshold.getCategoryGps();
+    Map<String, Integer> categoryGps = CategoryThreshold.getCategoryGps();
 
     @Override
     protected void setup(Context context)
@@ -44,59 +44,38 @@ public class GpsCombineMapper extends Mapper<LongWritable, Text, Text, Text> {
             throws IOException, InterruptedException {
 
 
-            String str = Util.getGBKString(value);
-            String[] result = str.split("\t");
+        String str = Util.getGBKString(value);
+        String[] result = str.split("\t");
 
-            if (result.length == 2) { //gps次数数据统计
+        if (result.length == 2) { //gps次数数据统计
 
-                String point = result[0];
-                String count = result[1];
+            String point = result[0];
+            String count = result[1];
 
-                String[] xy = point.split(",");
-                String currentID = cellCut.getCurrentCell(xy[0], xy[1]);
-                context.write(new Text(currentID), new Text("gpsCount_" + count));
+            String[] xy = point.split(",");
+            String currentID = cellCut.getCurrentCell(xy[0], xy[1]);
+            context.write(new Text(currentID), new Text("gpsCount_" + count));
 
-            } else {//聚类poi数据
+        }else{
+            String dataId = result[0];
+            String name=result[1];
+            String point = result[2];
 
-                try {       //全量poi统计
-                    Poi poi = Handle.parsePoi(str);
+            String[] xy = point.split(",");
+            List<String> crossCells = cellCut.getCrossCell(Double.valueOf(xy[0]),Double.valueOf(xy[1]),Double.valueOf
+                    (xy[2]), Double.valueOf(xy[3]));
+            for(String crossCell : crossCells){
+                context.write(new Text(crossCell), new Text("poi_" + dataId+"\t"+name));
 
-                    String name =  poi.name;
-                    String dataId = "1_" + poi.dataid;
-                    String category = poi.bigclass;
-                    String subCategory = poi.smallclass;
-                    String city = poi.city;
-
-                    //坐标
-                    if (poi.x == 0 || poi.y == 0) {
-                        return;
-                    }
-                    String point = String.valueOf(poi.x) + "," + String.valueOf(poi.y);
-
-                    Joiner joiner = Joiner.on("\t");
-                    String mapValue = joiner.join(new String[]{dataId, name, city, category, subCategory, point});
-
-                    String[] xy = point.split(",");
-
-                    String cateGpskey = category+"-"+subCategory;
-                    Integer dim = categoryGps.get(cateGpskey);
-
-                    CellCut cellCut = new CellCut(100, dim);
-
-//                    String currentID = cellCut.getCurrentCell(xy[0], xy[1]);
-
-
-                    List<String> currentIDs = cellCut.getCrossCell(xy[0],xy[1]);
-                    for (String currentID : currentIDs) {
-                        context.write(new Text(currentID), new Text("poi_"+mapValue));
-                    }
-
-//                    context.write(new Text(currentID), new Text("poi_" + mapValue));
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
             }
+
+        }
+
+
+
+
+
+
     }
 
 }

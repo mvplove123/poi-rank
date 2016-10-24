@@ -482,6 +482,9 @@ public class Handle {
             poi.kind = root.elementText("SRC_TYPECODE");
             poi.sign = "";
             poi.cpid = 1;
+
+            poi.geometry = root.elementText("GEOMETRY");
+
             String modifytime = root.elementText("MODIFY_TIME");
             if (modifytime != null && !modifytime.trim().equals(""))
                 poi.lastmodify = DateTime.parse(modifytime);
@@ -565,7 +568,7 @@ public class Handle {
                 String hotelrank = parseEntity(node,"item[@source='ELONG']", "hotelrank");
                 poi.hotelrank = hotelrank;
 
-                String praise = parseEntity(node,"item[@source='TONGCHENG']", "praise");
+                String praise = parseEntity(node,"item[@source='TONGCHENG']",  "praise");
                 poi.praise = praise;
 
                 String scoremap = parseEntity(node,"item[@source='DIANPING']/Shop", "Scoremap");
@@ -1494,20 +1497,20 @@ public class Handle {
     public static void main(String[] args) {
 
 
-        String str="18736.0元/";
+//        String str="18736.0元/";
+//
+//        int end = str.lastIndexOf(".");
+//        String ssellingPrice=str.substring(0,end);
+//        System.out.println(ssellingPrice);
 
-        int end = str.lastIndexOf(".");
-        String ssellingPrice=str.substring(0,end);
-        System.out.println(ssellingPrice);
 
 
-
-        String path = "D:\\structure\\test";
+        String path = "D:\\structure\\spark\\qthtest.xml";
 
         try {
 
-            BufferedReader bufferedReader = FileHandler.getReader(path, "gb18030");
-            BufferedWriter writer = new BufferedWriter(new FileWriter("D:\\structure\\xm.txt"));
+            BufferedReader bufferedReader = FileHandler.getReader(path, "utf-8");
+            BufferedWriter writer = new BufferedWriter(new FileWriter("D:\\structure\\qth.txt"));
             int count = 0;
             String line = "";
             while ((line = bufferedReader.readLine()) != null) {

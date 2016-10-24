@@ -32,6 +32,8 @@ public class GpsCombineMain {
 
     private static final String gps = "/user/go2search/taoyongbo/output/gps/";
 
+    private static final String point = "/user/go2search/taoyongbo/output/pointCombine/";
+
     protected static final Logger logger = LoggerFactory.getLogger(GpsCombineMain.class);
 
 
@@ -60,7 +62,7 @@ public class GpsCombineMain {
                 int e = input.length() - 1;
                 input = input.substring(0, e);
             }
-            String inputPath = Constants.MYSELF + "," +Constants.POI+","+Constants.BUS_POI+","+ gps;
+            String inputPath = point+","+ gps;
 
 
             String output = otherArgs[1];
@@ -97,9 +99,9 @@ public class GpsCombineMain {
 
 
             MultipleInputs.addInputPath(job, new Path(gps), TextInputFormat.class, GpsCombineMapper.class);
-            MultipleInputs.addInputPath(job, new Path(Constants.MYSELF), TextInputFormat.class, GpsCombineMapper.class);
-            MultipleInputs.addInputPath(job, new Path(Constants.POI), TextInputFormat.class, GpsCombineMapper.class);
-            MultipleInputs.addInputPath(job, new Path(Constants.BUS_POI), TextInputFormat.class, GpsCombineMapper.class);
+            MultipleInputs.addInputPath(job, new Path(point), TextInputFormat.class, GpsCombineMapper.class);
+//            MultipleInputs.addInputPath(job, new Path(Constants.POI), TextInputFormat.class, GpsCombineMapper.class);
+//            MultipleInputs.addInputPath(job, new Path(Constants.BUS_POI), TextInputFormat.class, GpsCombineMapper.class);
 
 
 

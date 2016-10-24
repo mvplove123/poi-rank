@@ -87,11 +87,11 @@ public class CombineMapper extends Mapper<LongWritable, Text, Text, Text> {
             context.write(new Text(dataId), new Text("search_" + mapValue));
 
 
-        }else if (result.length == 7){//热度
+        }else if (result.length == 3){//热度
 
 
             String dataId = result[0];
-            String hotCount = result[6];
+            String hotCount = result[2];
 
             context.write(new Text(dataId), new Text("hot_" + hotCount));
         } else{
@@ -188,8 +188,8 @@ public class CombineMapper extends Mapper<LongWritable, Text, Text, Text> {
         if (StringUtils.isBlank(keyword)) {
             return " ";
         }
-
-        String tagBrand = ".*LS:(.*)";//用户id
+            //\$\$LS:([\u4e00-\u9fa5]*)\$\$
+        String tagBrand = ".*LS:(.*)";
         Pattern pTagBrand = Pattern.compile(tagBrand);
         Matcher mTagBrand = pTagBrand.matcher(keyword);
         if (mTagBrand.matches()) {
@@ -204,5 +204,13 @@ public class CombineMapper extends Mapper<LongWritable, Text, Text, Text> {
 
     }
 
+
+    public static void main(String[] args) {
+
+        String keyword="$$TP:TP10006$$,$$DFB:美团团购$$,$$DFB:美团团购-餐饮团购$$,$$DFB:餐饮美食$$,$$DFB:餐饮美食-快餐小吃$$,$$DG:点评美食-快餐简餐$$,$$FB:餐饮美食-快餐小吃-中式快餐-云南过桥米线-快餐$$,$$LS:云南过桥米线$$,$$RC:云南过桥米线-云南过桥米线馆-云南过桥米线坊-云南过桥米线饭庄-云南过桥米线麻辣烫-云南过桥米线家和店-云南过桥米线滇城小镇-云南过桥米线麻辣土豆粉-云南过桥米线/黄焖鸡米饭-云南过桥米线老四川麻辣烫$$,$$RC:其它快餐小吃$$";
+
+        getBrand(keyword);
+
+    }
 
 }

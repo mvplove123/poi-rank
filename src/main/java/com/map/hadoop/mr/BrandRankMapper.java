@@ -42,16 +42,16 @@ public class BrandRankMapper extends Mapper<LongWritable, Text, Text, Text> {
 
         String city= result[2];
 
-        if(citys.contains(city)){
-
+//        if(citys.contains(city)){
+//        }
             //品牌作为key
             String brand = result[5];
             if (StringUtils.isNotBlank(brand)) {
-                String category = result[3];
-                String outkey = brand + "\t" + category;
-                context.write(new Text(outkey), new Text(str));
+//                String category = result[3];
+//                String outkey = brand + "\t" + category;
+                context.write(new Text(brand), new Text(str));
             }
-        }
+
 
 
 

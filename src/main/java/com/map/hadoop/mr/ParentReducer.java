@@ -10,17 +10,19 @@
 package com.map.hadoop.mr;
 
 import com.map.model.CalculatePoi;
-import com.map.util.Util;
+import com.map.model.CellCut;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.output.MultipleOutputs;
 import org.apache.hadoop.thirdparty.guava.common.base.Joiner;
 import org.apache.hadoop.thirdparty.guava.common.collect.Lists;
-import org.apache.tools.ant.util.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * parent reducer 计算
@@ -29,6 +31,7 @@ public class ParentReducer extends Reducer<Text, Text, Text, Text> {
 
 
     MultipleOutputs outputs = null;
+    protected static final Logger logger = LoggerFactory.getLogger(ParentReducer.class);
 
     @Override
     protected void setup(Context context)
@@ -43,6 +46,7 @@ public class ParentReducer extends Reducer<Text, Text, Text, Text> {
 
         countReduce(key,values,ctx);
 //        changeDataIdReduce(key, values, ctx);
+//        computeBoundXY(key,values,ctx);
     }
 
 
@@ -54,7 +58,7 @@ public class ParentReducer extends Reducer<Text, Text, Text, Text> {
         int internalSceneryNum = 0;
         int buildNum = 0;
         int parkNum=0;
-
+        int area=0;
 
         List<String> xlist = Lists.newArrayList();
         List<String> ylist = Lists.newArrayList();
@@ -109,8 +113,18 @@ public class ParentReducer extends Reducer<Text, Text, Text, Text> {
             }
         }
 
+        String boundXY = CellCut.getBoundXY(xlist, ylist);
+        if(StringUtils.isNotBlank(boundXY)){
 
-        int area = getArea(xlist, ylist);
+            String[] boundxy = boundXY.split(",");
+
+
+            double x = Double.valueOf(boundxy[1]) - Double.valueOf(boundxy[0]);
+            double y = Double.valueOf(boundxy[3]) - Double.valueOf(boundxy[2]);
+            area = (int) (x * y);
+            logger.info(boundXY+"area:"+area);
+
+        }
 
 
         if (StringUtils.isNotEmpty(parent) && StringUtils.isNotEmpty(child.toString())) {
@@ -125,6 +139,50 @@ public class ParentReducer extends Reducer<Text, Text, Text, Text> {
             outputs.write(new Text(parent), new Text(mapValue), "parent");
         }
     }
+
+
+    private void computeBoundXY(Text key, Iterable<Text> values, Context ctx) throws IOException,
+            InterruptedException {
+        String parent = "";
+
+        List<String> xlist = Lists.newArrayList();
+        List<String> ylist = Lists.newArrayList();
+
+        for (Text val : values) {
+
+            String valstr = val.toString();
+
+            if (valstr.startsWith("guid_")) {
+                String chd = valstr.substring(5);
+
+                String[] chdPro = chd.split("\t");
+                String xy = chdPro[2];
+
+                String[] xylist = xy.split(",");
+                xlist.add(xylist[0]);
+                ylist.add(xylist[1]);
+
+            }
+            if (valstr.startsWith("name_")) {
+                parent = valstr.substring(5);
+            }
+        }
+
+            String boundxy = CellCut.getBoundXY(xlist, ylist);
+
+            if(StringUtils.isNotBlank(boundxy) && StringUtils.isNotBlank(parent)){
+                logger.info(parent);
+                String parPro[] = parent.split("\\t");
+                String parentDataId = parPro[1];
+                outputs.write(new Text(parentDataId), new Text(boundxy), "structureXYId");
+            }
+
+
+    }
+
+
+
+
 
 
     private void changeDataIdReduce(Text key, Iterable<Text> values, Context ctx) throws IOException,
@@ -146,11 +204,8 @@ public class ParentReducer extends Reducer<Text, Text, Text, Text> {
             }
             if (valstr.startsWith("name_")) {
                 String parent = valstr.substring(5);
-
                 String parPro[] = parent.split("\t");
-                parentDataId = parPro[1] + "\t" + parPro[2];
-
-
+                parentDataId = parPro[1];
             }
         }
 
@@ -174,41 +229,7 @@ public class ParentReducer extends Reducer<Text, Text, Text, Text> {
     }
 
 
-    private Integer getArea(List<String> xlist, List<String> ylist) {
 
-
-        if (xlist.isEmpty() || ylist.isEmpty()) {
-            return 0;
-        }
-
-
-        Collections.sort(xlist, new Comparator() {
-            public int compare(Object o1, Object o2) {
-                return new Double((String) o1).compareTo(new Double((String) o2));
-            }
-        });
-
-
-        Collections.sort(ylist, new Comparator() {
-            public int compare(Object o1, Object o2) {
-                return new Double((String) o1).compareTo(new Double((String) o2));
-            }
-        });
-
-        double xmin = Double.parseDouble(xlist.get(0));
-        double xmax = Double.parseDouble(xlist.get(xlist.size() - 1));
-
-        double ymin = Double.parseDouble(ylist.get(0));
-        double ymax = Double.parseDouble(ylist.get(ylist.size() - 1));
-
-        double x = xmax - xmin;
-        double y = ymax - ymin;
-
-        int area = (int) (x * y);
-
-        return area;
-
-    }
 
 
     public static void main(String[] args) {

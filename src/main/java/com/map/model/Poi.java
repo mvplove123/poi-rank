@@ -136,7 +136,7 @@ public class Poi {
 	// 扩展字段,赋别名时用,一般情况下都用不到该字段
 	public boolean isMainNode = false;
 
-
+	public String geometry=null;
 
 
 	public String hotelcommentnum="0"; //酒店类评论数

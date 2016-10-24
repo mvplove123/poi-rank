@@ -42,11 +42,11 @@ public class CategoryThreshold {
 
     public static Map<String,Integer> getCategoryGps(){
         Map<String, Integer> categoryGps = Maps.newHashMap();
-        categoryGps.put("地名-村庄",null);
-        categoryGps.put("地名-地名",null);
+        categoryGps.put("地名-村庄",300);
+        categoryGps.put("地名-地名",500);
         categoryGps.put("地名-其它",null);
         categoryGps.put("地名-区县",null);
-        categoryGps.put("地名-乡镇",null);
+        categoryGps.put("地名-乡镇",1000);
         categoryGps.put("旅游景点-5A4A景点",700);
 
         categoryGps.put("房地产-别墅",500);
@@ -78,6 +78,7 @@ public class CategoryThreshold {
         categoryGps.put("公司企业-工厂",200);
         categoryGps.put("公司企业-知名工厂",200);
         categoryGps.put("交通出行-长途客运站",200);
+        categoryGps.put("交通出行-地铁站",200);
         categoryGps.put("旅游景点-度假村",200);
         categoryGps.put("旅游景点-公园",200);
         categoryGps.put("旅游景点-景点",200);

@@ -29,7 +29,7 @@ import org.apache.hadoop.util.GenericOptionsParser;
  * FeatureValue
  */
 public class FeatureValueMain {
-    private static final String configFeturePath = "/fetureConfig/poi-rank.txt";
+    private static final String configFeturePath = "/fetureConfig/poi-threshold.txt";
 
     private static final String inOriginalPoiPath = "/user/go2search/taoyongbo/output/combine/";
 
@@ -44,7 +44,7 @@ public class FeatureValueMain {
             conf.setBoolean("mapred.reduce.tasks.speculative.execution", true);
             conf.setBoolean("mapred.compress.map.output", true);
             conf.setInt("mapred.task.timeout", 6000000);
-            conf.setStrings("mapred.job.priority", "VERY_HIGH");
+//            conf.setStrings("mapred.job.priority", "VERY_HIGH");
 
 
             String[] otherArgs = new GenericOptionsParser(conf, args)
@@ -85,7 +85,7 @@ public class FeatureValueMain {
             System.out.println("input path: " + sb.toString());
             System.out.println("output path: " + out);
             long ctm = System.currentTimeMillis();
-            Job job = new Job(conf, "FeatureValue --");
+            Job job = new Job(conf, "FeatureValue --taoyongbo");
             job.setJarByClass(FeatureValueMain.class);
             job.setReducerClass(FeatureValueReducer.class);
 

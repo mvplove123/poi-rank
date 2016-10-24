@@ -49,7 +49,7 @@ public class BrandRankReducer extends Reducer<Text, Text, Text, Text> {
 
             String[] fields = valstr.split("\t");
 
-            Double rank = Double.valueOf(fields[20]);
+            Double rank = Double.valueOf(fields[36]);
             sum += rank;
             count++;
         }

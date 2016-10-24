@@ -23,4 +23,15 @@ public class Constants {
 
     public static final String STRUCTURE = "/user/go2data/huajin.shen_dev/structure_by_name/2016-08-24/name_prefix_structure_release";
 
+    public static final String POLYGON="/user/go2data/sdb_data/all_data/nochange_data/2016-08-24/result/POLYGON";
+
+//    public static final String MYSELF = "/user/go2data/poi_data/2015-11-05_2016-06-15/result/poi";
+//
+//    public static final String POI = "/user/go2data/nochange_data/2016-06-15/result/POI";
+//
+//    public static final String BUS_POI = "/user/go2data/nochange_data/2016-06-15/result/BUSPOI";
+//
+//    public static final String STRUCTURE = "/user/go2data/poi_data/2015-11-05_2016-06-15/result/structure_by_name/name_prefix_structure_release";
+
+
 }

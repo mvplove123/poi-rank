@@ -52,7 +52,15 @@ public class ChildMain {
                 int e = input.length() - 1;
                 input = input.substring(0, e);
             }
-            String inputPath = input + child;
+            String[] inputPath = input.split(",");
+
+            if(inputPath.length!= 4){
+                System.err.println("input length is wrong,should be 4");
+                System.exit(2);
+            }
+
+
+
 
 
             String output = otherArgs[1];
@@ -70,13 +78,13 @@ public class ChildMain {
             }
 
             StringBuffer sb = new StringBuffer();
-            sb.append("childMain:" + Constants.STRUCTURE);
+            sb.append("childMain:" + input);
 
 
             System.out.println("input path: " + sb.toString());
             System.out.println("output path: " + out);
             long ctm = System.currentTimeMillis();
-            Job job = new Job(conf, "ChildMain --");
+            Job job = new Job(conf, "ChildMain --taoyongbo");
             job.setJarByClass(ChildMain.class);
             job.setReducerClass(ChildReducer.class);
 
@@ -89,13 +97,13 @@ public class ChildMain {
             job.setMapOutputValueClass(Text.class);
             job.setOutputKeyClass(Text.class);
             job.setOutputValueClass(Text.class);
-//			job.setNumReduceTasks(1);
+			job.setNumReduceTasks(500);
 
 
-            MultipleInputs.addInputPath(job, new Path(Constants.STRUCTURE), TextInputFormat.class, ChildMapper.class);
-            MultipleInputs.addInputPath(job, new Path(Constants.MYSELF), TextInputFormat.class, ChildMapper.class);
-            MultipleInputs.addInputPath(job, new Path(Constants.POI), TextInputFormat.class, ChildMapper.class);
-            MultipleInputs.addInputPath(job, new Path(Constants.BUS_POI), TextInputFormat.class, ChildMapper.class);
+            MultipleInputs.addInputPath(job, new Path(inputPath[0]), TextInputFormat.class, ChildMapper.class);
+            MultipleInputs.addInputPath(job, new Path(inputPath[1]), TextInputFormat.class, ChildMapper.class);
+            MultipleInputs.addInputPath(job, new Path(inputPath[2]), TextInputFormat.class, ChildMapper.class);
+            MultipleInputs.addInputPath(job, new Path(inputPath[3]), TextInputFormat.class, ChildMapper.class);
 
 
             FileOutputFormat.setOutputPath(job, out);

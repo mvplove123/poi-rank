@@ -16,21 +16,22 @@ public class ExcelParse {
 
     public static void main(String[] args) {
 
-
         try {
-            List<FeatureThreshold> result =  ExcelHandler.readExcel("D:\\structure\\poi-rank.xlsx");
-            OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream("D:\\structure\\poi-rank.txt",
-                    false), "GB18030");
-            OutputStreamWriter writer1 = new OutputStreamWriter(new FileOutputStream("D:\\structure\\poi-weight.txt",
-                    false), "GB18030");
+            List<FeatureThreshold> result = ExcelHandler.readExcel("/search/odin/taoyongbo/rank/input/poi-rank.xlsx");
+            OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream
+                    ("/search/odin/taoyongbo/rank/result/poi-threshold.txt",
+                            false), "GB18030");
 
-            for(FeatureThreshold featureThreshold : result){
+            OutputStreamWriter writer1 = new OutputStreamWriter(new FileOutputStream
+                    ("/search/odin/taoyongbo/rank/result/poi-weight.txt",
+                            false), "GB18030");
 
-                if(StringUtils.isBlank(featureThreshold.getSubCategory())){
+            for (FeatureThreshold featureThreshold : result) {
+
+                if (StringUtils.isBlank(featureThreshold.getSubCategory())) {
                     writer1.write(featureThreshold.toString() + "\n");
-                }else{
+                } else {
                     writer.write(featureThreshold.toStringRank() + "\n");
-
                 }
             }
 
@@ -38,17 +39,7 @@ public class ExcelParse {
             writer1.flush();
             writer.close();
             writer1.close();
-
-            System.out.println("ok");
-
-
-
-
-
-
-
-
-
+            System.out.println("parse excel finished");
 
         } catch (IOException e) {
             e.printStackTrace();

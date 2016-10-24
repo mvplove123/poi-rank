@@ -1,5 +1,6 @@
 package com.map.util;
 
+import org.apache.commons.lang3.CharEncoding;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.MutablePair;
 
@@ -635,6 +636,8 @@ public class WordUtils {
 
 
         System.out.println(str1+"转化"+CharNormalizer.char2String(result));
+
+
 
     }
 
